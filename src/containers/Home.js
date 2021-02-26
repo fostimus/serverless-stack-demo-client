@@ -36,6 +36,8 @@ export default function Home() {
     return API.get("notes", "/notes");
   }
 
+  console.log(notes);
+
   function renderNotesList(notes) {
     return (
       <>
@@ -87,7 +89,7 @@ export default function Home() {
       </div>
     );
   }
-  
+
   return (
     <div className="Home">
       {isAuthenticated ? renderNotes() : renderLander()}

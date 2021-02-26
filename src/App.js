@@ -8,6 +8,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { AppContext } from "./libs/contextLib";
 import { onError } from "./libs/errorLib";
 import Routes from "./Routes";
+import Search from "./components/Search";
 import "./App.css";
 
 function App() {
@@ -23,9 +24,8 @@ function App() {
     try {
       await Auth.currentSession();
       userHasAuthenticated(true);
-    }
-    catch(e) {
-      if (e !== 'No current user') {
+    } catch (e) {
+      if (e !== "No current user") {
         onError(e);
       }
     }
@@ -52,6 +52,9 @@ function App() {
           </LinkContainer>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
+            <Nav className="mx-auto">
+              <Search />
+            </Nav>
             <Nav activeKey={window.location.pathname}>
               {isAuthenticated ? (
                 <>
@@ -74,7 +77,9 @@ function App() {
           </Navbar.Collapse>
         </Navbar>
         <ErrorBoundary>
-          <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+          <AppContext.Provider
+            value={{ isAuthenticated, userHasAuthenticated }}
+          >
             <Routes />
           </AppContext.Provider>
         </ErrorBoundary>
