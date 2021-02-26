@@ -3,6 +3,7 @@ import { API } from "aws-amplify";
 import { Link } from "react-router-dom";
 import { BsPencilSquare } from "react-icons/bs";
 import ListGroup from "react-bootstrap/ListGroup";
+import Spinner from "react-bootstrap/Spinner";
 import { LinkContainer } from "react-router-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
@@ -28,7 +29,6 @@ export default function Home() {
       } catch (e) {
         onError(e);
       }
-
       setIsLoading(false);
     }
 
@@ -93,19 +93,27 @@ export default function Home() {
 
   function renderNotes() {
     return (
-      <div className="notes">
-        <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
-        <form className="search">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchString}
-            onChange={e => setSearchString(e.target.value)}
-          />
-          <button onClick={e => searchNotes(e, searchString)}>Enter</button>
-        </form>
-      </div>
+      <>
+        {isLoading ? (
+          <div className="note-spinner text-center">
+            <Spinner animation="border" variant="secondary" />
+          </div>
+        ) : (
+          <div className="notes">
+            <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
+            <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+            <form className="search">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchString}
+                onChange={e => setSearchString(e.target.value)}
+              />
+              <button onClick={e => searchNotes(e, searchString)}>Enter</button>
+            </form>
+          </div>
+        )}
+      </>
     );
   }
 

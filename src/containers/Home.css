@@ -29,3 +29,18 @@
   background: grey;
   color: white;
 }
+
+.note-spinner {
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 30%;
+  text-align: center;
+}
+
+.note-spinner .spinner-border {
+  --spinner-size: 5rem;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+}
