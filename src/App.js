@@ -8,7 +8,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { AppContext } from "./libs/contextLib";
 import { onError } from "./libs/errorLib";
 import Routes from "./Routes";
-import Search from "./components/Search";
 import "./App.css";
 
 function App() {

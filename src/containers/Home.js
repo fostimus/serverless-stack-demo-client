@@ -7,13 +7,13 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Home.css";
-import Search from "../components/Search";
 
 export default function Home() {
   const [notes, setNotes] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
   const [searchString, setSearchString] = useState("");
+  const [displayedNotes, setDisplayedNotes] = useState([]);
 
   useEffect(() => {
     async function onLoad() {
@@ -24,6 +24,7 @@ export default function Home() {
       try {
         const notes = await loadNotes();
         setNotes(notes);
+        setDisplayedNotes(notes);
       } catch (e) {
         onError(e);
       }
@@ -38,12 +39,13 @@ export default function Home() {
     return API.get("notes", "/notes");
   }
 
-  function searchNotes(searchString) {
+  function searchNotes(e, searchString) {
+    e.preventDefault();
     const filteredNotes = notes.filter(note =>
       note.content.includes(searchString)
     );
 
-    setNotes(filteredNotes);
+    setDisplayedNotes(filteredNotes);
   }
 
   function renderNotesList(notes) {
@@ -55,7 +57,7 @@ export default function Home() {
             <span className="ml-2 font-weight-bold">Create a new note</span>
           </ListGroup.Item>
         </LinkContainer>
-        {notes.map(({ noteId, content, createdAt }) => (
+        {displayedNotes.map(({ noteId, content, createdAt }) => (
           <LinkContainer key={noteId} to={`/notes/${noteId}`}>
             <ListGroup.Item action>
               <span className="font-weight-bold">
@@ -93,18 +95,16 @@ export default function Home() {
     return (
       <div className="notes">
         <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-        <div>
+        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+        <form className="search">
           <input
             type="text"
             placeholder="Search..."
             value={searchString}
             onChange={e => setSearchString(e.target.value)}
-            className="search-input"
           />
-          <button onClick={() => searchNotes(searchString)}>Go!</button>
-        </div>
-
-        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+          <button onClick={e => searchNotes(e, searchString)}>Enter</button>
+        </form>
       </div>
     );
   }
