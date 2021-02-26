@@ -7,11 +7,13 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import "./Home.css";
+import Search from "../components/Search";
 
 export default function Home() {
   const [notes, setNotes] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(true);
+  const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
     async function onLoad() {
@@ -36,7 +38,13 @@ export default function Home() {
     return API.get("notes", "/notes");
   }
 
-  console.log(notes);
+  function searchNotes(searchString) {
+    const filteredNotes = notes.filter(note =>
+      note.content.includes(searchString)
+    );
+
+    setNotes(filteredNotes);
+  }
 
   function renderNotesList(notes) {
     return (
@@ -85,6 +93,17 @@ export default function Home() {
     return (
       <div className="notes">
         <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
+        <div>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchString}
+            onChange={e => setSearchString(e.target.value)}
+            className="search-input"
+          />
+          <button onClick={() => searchNotes(searchString)}>Go!</button>
+        </div>
+
         <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
       </div>
     );

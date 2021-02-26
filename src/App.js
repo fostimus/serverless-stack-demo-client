@@ -52,9 +52,6 @@ function App() {
           </LinkContainer>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <Nav className="mx-auto">
-              <Search />
-            </Nav>
             <Nav activeKey={window.location.pathname}>
               {isAuthenticated ? (
                 <>
