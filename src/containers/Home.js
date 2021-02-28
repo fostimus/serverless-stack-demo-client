@@ -50,8 +50,9 @@ export default function Home() {
 
   function searchNotes(e, searchString) {
     e.preventDefault();
+
     const filteredNotes = notes.filter(note =>
-      note.content.includes(searchString)
+      note.content.toLowerCase().includes(searchString.toLowerCase())
     );
 
     setDisplayedNotes(filteredNotes);
